@@ -1,0 +1,881 @@
+%
+% File: pulsedopo/base/pulsedopo.tex [plain TeX code]
+% Last change: February 18, 2026
+%
+% Derivation of the phase evolution in parametric amplification processes
+% in chiral media.
+%
+% Copyright (C) 2026, Fredrik Jonsson, under GPL 3.0. See enclosed LICENSE.
+%
+\input macros/epsf.tex
+\input macros/eplain.tex
+\font\ninerm=cmr9
+\font\twentyrm=cmr12 at 20 truept
+\font\twelvesc=cmcsc10 at 12 truept
+\input amssym % to get the {\Bbb E} font (strikethrough E)
+\def\document #1 {\hsize=150mm\hoffset=4.6mm\vsize=230mm\voffset=7mm
+  \topskip=0pt\baselineskip=12pt\parskip=0pt\leftskip=0pt\parindent=15pt
+  \headline={\ifnum\pageno>1\ifodd\pageno\rightheadline\else\leftheadline\fi
+    \else\hfill\fi}
+  \def\rightheadline{\tenrm{\it #1}
+    \hfil{\it\date}}
+  \def\leftheadline{\tenrm{\it\date}
+    \hfil{\it #1}}
+  \noindent~\vskip-60pt\hskip-40pt{\epsfbox{macros/UU_logo_color.eps}}
+  \vskip-42pt\hfill\vbox{\hbox{{\it\author}}
+  \hbox{{\it\date}}}\vskip 36pt
+  \centerline{\twelvesc #1}
+  \vskip 24pt\noindent}
+\def\section #1 {\bigskip\goodbreak\noindent{\bf #1}
+  \par\nobreak\smallskip\noindent}
+\def\subsection #1 {\bigskip\goodbreak\noindent{\it #1}
+  \par\nobreak\smallskip\noindent}
+\def\iint{\mathop{\int\kern-8pt\int}}
+\def\iiint{\mathop{\int\kern-8pt\int\kern-8pt\int}}
+\def\oiint{\mathop{\int\kern-8pt\int\kern-13.2pt{\bigcirc}}}
+\def\Re{\mathop{\rm Re}\nolimits} % real part
+\def\Im{\mathop{\rm Im}\nolimits} % imaginary part
+\def\Tr{\mathop{\rm Tr}\nolimits} % quantum mechanical trace
+\def\fourier{\mathop{\frak F}\nolimits}
+\def\eqq{\mathop{\vbox{\hbox{\hskip2pt?}\vskip-6pt\hbox{=}}}}
+\def\sn{\mathop{\rm sn}\nolimits}
+\def\cn{\mathop{\rm cn}\nolimits}
+\def\sech{\mathop{\rm sech}\nolimits}
+\def\acosh{\mathop{\rm acosh}\nolimits}
+
+%
+% Blackboard bold fonts.
+%
+\font\mbb=msbm10 
+\newfam\bbb
+\textfont\bbb=\mbb
+
+%
+% Define in which way we want displayed equation numbers to appear in
+% the text. In this case, it is preferred to have the equation numbers
+% as one single running index, rather than the form otherwise commonly
+% found format used in books, (<chapter number>.<equation number>).
+%
+\def\eqconstruct#1{#1}
+
+%
+% Define in which way we want displayed subequation numbers
+% to appear in the text.
+%
+\newcount\subref
+\def\eqsubreftext#1#2{%
+  \subref = #2           % The space stops a <number>.
+  \advance\subref by 96  % `a' is character code 97.
+  #1{\rm\char\subref}%
+}
+
+%
+% Define the 'boxit' macro from D.E. Knuths "The TeXbook, Exercise 21.3.
+%
+\def\boxit#1{\vbox{\hrule\hbox{\vrule\kern3pt
+  \vbox{\kern3pt#1\kern3pt}\kern3pt\vrule}\hrule}}
+
+\def\date{February 18, 2026}
+\def\author{Fredrik Jonsson}
+\document{Phase evolution in parametric processes in chiral media}
+\vskip24pt
+
+\section{Definition of fields and parameters}
+The quasi-monochromatic optical field is in the circularly polarized basis, with
+complex-valued basis vectors ${\bf e}_+=({\bf e}_x+i{\bf e}_y)/\sqrt{2}$ for left
+circular polarization (LCP) and  ${\bf e}_-=({\bf e}_x-i{\bf e}_y)/\sqrt{2}$ for
+right circular polarization (RCP), expressed as
+$$
+  {\bf E}(z,t)=\sum^3_{k=1}{\rm Re}[
+      ({\bf e}_+ E^+_{\omega_k}(z)+{\bf e}_-E^-_{\omega_k}(z))\exp(-i\omega_k t)],
+  \eqdef{eq:w10}
+$$
+with $k=1,2,3$ designating idler, signal and pump, respectively.
+For the present analysis, we choose a crystal of point-symmetry group 32
+(trigonal) is chosen. As this group possess no centre of inversion, the axial
+tensor $\gamma_{ijkl}$ for nonlocal interaction shares the same nonzero and
+independent elements as the third-order polar tensor $\chi_{ijkl}$ for local
+(electric dipolar) interactions, and the electric polarization density of the
+medium becomes
+$$
+  \eqalignno{
+  P^{\pm}_{\omega_{1}}
+    &=\varepsilon_0\Big(n^2_{1}-1
+  \pm i\gamma_{1}{{\partial}\over{\partial z}}\Big)
+        E^{\pm}_{\omega_{1}}+\varepsilon_0
+      \Big(p_{1} \pm i q_{1}{{\partial}\over{\partial z}}\Big)
+       (E^{\mp}_{\omega_3} E^{\pm*}_{\omega_{2}}),\eqdefn{eq:w20}&\eqsubdef{eq:w20a}\cr
+  P^{\pm}_{\omega_{2}}
+    &=\varepsilon_0\Big(n^2_{2}-1
+  \pm i\gamma_{2}{{\partial}\over{\partial z}}\Big)
+        E^{\pm}_{\omega_{2}}+\varepsilon_0
+      \Big(p_{2} \pm i q_{2}{{\partial}\over{\partial z}}\Big)
+       (E^{\mp}_{\omega_3} E^{\pm*}_{\omega_{1}}),&\eqsubdef{eq:w20b}\cr
+  P^{\mp}_{\omega_3}
+    &=\varepsilon_0\Big(n^2_3-1
+  \mp i\gamma_3{{\partial}\over{\partial z}}\Big)
+        E^{\mp}_{\omega_3}+\varepsilon_0
+      \Big(p_3 \mp i q_3{{\partial}\over{\partial z}}\Big)
+        (E^{\pm}_{\omega_1} E^{\pm}_{\omega_2}),&\eqsubdef{eq:w20c}\cr
+        }
+$$
+where the elements of the local ($\chi_{ij}$, $\chi_{ijk}$) and non-local
+($\gamma_{ijk}$, $\gamma_{ijkl}$) susceptibility tensors in standard
+notation are expressed as
+$$
+  \eqalign{
+    n^2_k&=1+\chi_{xx}(-\omega_k;\omega_k),\quad
+    \gamma_k=\gamma_{xyz}(-\omega_k;\omega_k),\cr
+    p_{1,2}&=2^{1/2}\chi_{xxx}(-\omega_{1,2};\omega_3,-\omega_{2,1}),\cr
+    p_3&=2^{1/2}\chi_{xxx}(-\omega_3;\omega_1,\omega_2),\cr
+    q_{1,2}&=2^{1/2}\gamma_{xxyz}(-\omega_{1,2};\omega_3,-\omega_{2,1}),\cr
+    q_3&=2^{1/2}\gamma_{xxyz}(-\omega_3;\omega_1,\omega_2).\cr
+  }
+\eqdef{eq:w30}
+$$
+
+\section{Formulation of the equations of motion}
+By separating the fields into their forward and backward traveling components,
+keeping in mind that the backward traveling LCP and RCP components are to be
+connected with their respective complex-conjugated basis vectors ${\bf e}^*_+$
+and ${\bf e}^*_-$, respectively, according to
+$$
+  \eqalign{
+    E^{\pm}_{\omega_k}=&a^{f\pm}_{k}\exp(i(k_k\mp\alpha_k)z)
+      +a^{b\mp}_{k}\exp(-i(k_k\pm \alpha_k)z)
+  }
+\eqdef{eq:w40}
+$$
+with $k_k=\omega_k n_k/c$ and $\alpha_k=k^2_k\gamma_k/2n^2_k$, followed by
+averaging over a few spatial periods, the resulting equations for the field
+envelopes become, for the forward traveling wave
+$$
+  \eqalignno{
+    {{\partial a^{f\pm}_{1}}\over{\partial z}}
+      &=i\kappa^{\pm}_{1} a^{f\mp}_{3} a^{f\pm*}_{2}
+          \exp(i(\Delta k\pm\Delta\alpha)z),
+    \eqdefn{eq:w50}&\eqsubdef{eq:w50a}\cr
+    {{\partial a^{f\pm}_{2}}\over{\partial z}}
+      &=i\kappa^{\pm}_{2} a^{f\mp}_{3} a^{f\pm*}_{1}
+          \exp(i(\Delta k\pm\Delta\alpha)z),
+    &\eqsubdef{eq:w50b}\cr
+    {{\partial a^{f\mp}_{3}}\over{\partial z}}
+      &=i\kappa^{\mp}_3 a^{f\pm}_{1} a^{f\pm}_{2}
+          \exp(-i(\Delta k\pm\Delta\alpha)z),
+    &\eqsubdef{eq:w50c}\cr
+  }
+$$
+and for the backward traveling wave
+$$
+  \eqalignno{
+    {{\partial a^{b\mp}_{1}}\over{\partial z}}
+      &=-i\kappa^{\mp}_{1} a^{b\pm}_{3} a^{b\mp*}_{2}
+           \exp(-i(\Delta k\mp\Delta\alpha)z),
+    \eqdefn{eq:w52}&\eqsubdef{eq:w52a}\cr
+    {{\partial a^{b\mp}_{2}}\over{\partial z}}
+      &=-i\kappa^{\mp}_{2} a^{b\pm}_{3} a^{b\mp*}_{1}
+           \exp(-i(\Delta k\mp\Delta\alpha)z),
+    &\eqsubdef{eq:w52b}\cr
+    {{\partial a^{b\pm}_{3}}\over{\partial z}}
+      &=-i\kappa^{\pm}_3 a^{b\mp}_{1} a^{b\mp}_{2}
+           \exp(i(\Delta k\mp\Delta\alpha)z),
+    &\eqsubdef{eq:w52c}\cr
+  }
+$$
+where $\Delta\alpha=k_3-k_2-k_1$ is the electric dipolar phase mismatch and
+$\Delta\alpha=\alpha_1+\alpha_2+\alpha_3$ its nonlocal correction.
+In Eqs.~\eqref{eq:w50} and~\eqref{eq:w52}, the coupling coefficients include
+the nonlocal interaction between light and matter via the coefficients
+$\alpha_j$ and $q_j$ as
+$$
+  \eqalignno{
+  \kappa^{\pm}_1&=i{{k_1}\over{2n^2_1}}[p_1-q_1(\alpha_3+\alpha_2)\mp q_1(k_3-k_2)],
+    \eqdefn{eq:w60}&\eqsubdef{eq:w60a}\cr
+  \kappa^{\pm}_2&=i{{k_2}\over{2n^2_2}}[p_2-q_2(\alpha_3+\alpha_1)\mp q_2(k_3-k_1)],
+    &\eqsubdef{eq:w60b}\cr
+  \kappa^{\pm}_3&=i{{k_3}\over{2n^2_3}}[p_3-q_3(\alpha_1+\alpha_2)\mp q_3(k_1+k_2)].
+    &\eqsubdef{eq:w60c}\cr
+  }
+$$
+
+\section{Evolution of field envelopes}
+By substitution into real-valued intensity and phase variables,
+$$
+  \eqalignno{
+  a^{f\pm}_k(z)&=\big(\kappa^{\pm}_k u^{\pm}_k(z)\big)^{1/2}\exp(i\varphi^{\pm}_k(z))
+  \eqdefn{eq:w70}&\eqsubdef{eq:w70a},\cr
+  a^{b\pm}_k(z)&=\big(\kappa^{\pm}_k v^{\pm}_k(z)\big)^{1/2}\exp(i\psi^{\pm}_k(z))
+  &\eqsubdef{eq:w70b},\cr
+  }
+$$
+the system~\eqref{eq:w50} for the field envelopes of the forward traveling wave
+can by separation into real and imaginary parts be cast into a real-valued and
+normalized form. For the forward traveling components this becomes
+$$
+  \eqalignno{
+    {{\partial u^{\pm}_1}\over{\partial z}}
+        &={{\partial u^{\pm}_2}\over{\partial z}}
+         =-{{\partial u^{\mp}_3}\over{\partial z}}
+         =-2\kappa_{\pm}(u^{\pm}_1 u^{\pm}_2 u^{\mp}_3)^{1/2}\sin\varphi_{\pm},
+    \eqdefn{eq:w80}&\eqsubdef{eq:w80a}\cr
+    {{\partial\varphi_{\pm}}\over{\partial z}}
+        &={{1}\over{2}}\cot\varphi_{\pm}{{\partial}\over{\partial z}}
+           \ln(u^{\pm}_1 u^{\pm}_2 u^{\mp}_3) + (\Delta k\pm\Delta\alpha),
+    &\eqsubdef{eq:w80b}\cr
+  }
+$$
+while for the backward traveling components
+$$
+  \eqalignno{
+    {{\partial v^{\pm}_1}\over{\partial z}}
+        &={{\partial v^{\pm}_2}\over{\partial z}}
+         =-{{\partial v^{\mp}_3}\over{\partial z}}
+         =2\kappa_{\pm}(v^{\pm}_1 v^{\pm}_2 v^{\mp}_3)^{1/2}\sin\psi_{\pm},
+    \eqdefn{eq:w90}&\eqsubdef{eq:w90a}\cr
+    {{\partial\psi_{\pm}}\over{\partial z}}
+        &={{1}\over{2}}\cot\psi_{\pm}{{\partial}\over{\partial z}}
+           \ln(v^{\pm}_1 v^{\pm}_2 v^{\mp}_3) - (\Delta k\pm\Delta\alpha),
+    &\eqsubdef{eq:w90b}\cr
+  }
+$$
+with common coupling coefficients
+$$
+  \kappa_{\pm}=(\kappa^{\pm}_1 \kappa^{\pm}_2 \kappa^{\mp}_3)^{1/2}
+  \eqdef{eq:w92}
+$$
+and with the relative phase angles $\varphi_{\pm}(z)$ and $\psi_{\pm}(z)$
+expressed in terms of the individual phases of the field envelopes as
+$$
+  \eqalignno{
+    \varphi_{\pm}&=\varphi^{\mp}_3-\varphi^{\pm}_2-\varphi^{\pm}_1
+       +(\Delta k\pm\Delta\alpha)z,
+    \eqdefn{eq:w100}&\eqsubdef{eq:w100a}\cr
+    \psi_{\pm}&=\psi^{\mp}_3-\psi^{\pm}_2-\psi^{\pm}_1
+       -(\Delta k\pm\Delta\alpha)z.
+    &\eqsubdef{eq:w100b}\cr
+  }
+$$
+From Eqs.~\eqref{eq:w80a} and~\eqref{eq:w90a}, which constitute the
+Manley--Rowe relations for the energy transfer rate between frequency
+components of the counter-propagating waves, one obtains the set of
+invariants of motion $\tilde{u}^{\pm}_k$ and $\tilde{v}^{\pm}_k$ determined
+from the boundary conditions as
+$$
+  \eqalignno{
+  u^{\pm}_2+u^{\mp}_3&=m^{\pm}_1,\qquad
+  u^{\pm}_1+u^{\mp}_3=m^{\pm}_2,\qquad
+  u^{\pm}_1-u^{\pm}_2=m^{\mp}_3,
+  \eqdefn{eq:w110}&\eqsubdef{eq:w110a}\cr
+  v^{\pm}_2+v^{\mp}_3&=m'^{\pm}_1,\qquad
+  v^{\pm}_1+v^{\mp}_3=m'^{\pm}_2,\qquad
+  v^{\pm}_1-v^{\pm}_2=m'^{\mp}_3,
+  &\eqsubdef{eq:w110b}\cr
+  }
+$$
+with constants $m^{\pm}_k$ and $m'^{\pm}_k$. These relations allow us to solve
+for, say, the counter-propagating pump $u^{\pm}_3(z)$ and $v^{\pm}_3(z)$, from
+which the general idler and signal fields directly can be obtained.
+
+By multiplying Eqs.~\eqref{eq:w80b} and~\eqref{eq:w90b} by
+$\sin(\varphi_{\pm})$ and $\sin(\psi_{\pm})$, respectively, followed by
+identification of total differentials, these equations can be integrated
+for elimination of the relative phases in Eqs.~\eqref{eq:w80a}
+and~\eqref{eq:w90a} as
+$$
+  \eqalignno{
+  \cos\varphi_{\pm}&=(\Gamma_{\pm}-\Delta\aleph_{\pm}u^{\mp}_3)
+     (u^{\pm}_1 u^{\pm}_2 u^{\mp}_3)^{-1/2}
+  \eqdefn{eq:w120}&\eqsubdef{eq:w120a}\cr
+  \cos\psi_{\pm}&=(\Gamma'_{\pm}-\Delta\aleph_{\pm}v^{\mp}_3)
+     (v^{\pm}_1 v^{\pm}_2 v^{\mp}_3)^{-1/2}
+  \eqsubdef{eq:w120b}\cr
+  }
+$$
+where $\Gamma_{\pm}$ and $\Gamma'_{\pm}$ are constants of integration for the
+forward and backward traveling LCP/RCP components, and where
+$$
+  \Delta\aleph_{\pm}={{(\Delta k\pm\Delta\alpha)}\over{2\kappa_{\pm}}}
+\eqdef{eq:w130}
+$$
+is the phase mismatch normalized to the coupling efficiency. This taken together
+with the invariants of motion~(\ref{eq:w110}) directly leads to the equations
+for the RCP/LCP pump envelopes taking the form
+$$
+  \eqalignno{
+  {{\partial u^{\mp}_3}\over{\partial z}}&=2\kappa_{\pm}\big[
+    (m^{\pm}_1-u^{\mp}_3)(m^{\pm}_2-u^{\mp}_3)u^{\mp}_3
+      -(\Gamma_{\pm}-\Delta\aleph_{\pm}u^{\mp}_3)^2
+  \big]^{1/2},
+  \eqdefn{eq:w140}&\eqsubdef{eq:w140a}\cr
+  {{\partial v^{\mp}_3}\over{\partial z}}&=-2\kappa_{\pm}\big[
+    (m'^{\pm}_1-v^{\mp}_3)(v'^{\pm}_2-v^{\mp}_3)v^{\mp}_3
+      -(\Gamma'_{\pm}-\Delta\aleph_{\pm}v^{\mp}_3)^2
+  \big]^{1/2}.
+  &\eqsubdef{eq:w140b}\cr
+  }
+$$
+In order to solve Eqs.~\eqref{eq:w140}, the integration constants $\Gamma_{\pm}$
+and $\Gamma'_{\pm}$ need to be determined by the boundary conditions of the
+amplitudes and phases, typically applied at the entry $z=0$ and exit $z=L$ of
+the nonlinear medium and by using the expressions from Eqs.~\eqref{eq:w120}.
+This way, the third-order polynomial in the square root of the right-hand sides
+may be factorized by Cardano's method to yield the equations
+$$
+  \eqalignno{
+  {{\partial u^{\mp}_3}\over{\partial z}}&=2\kappa_{\pm}\big[
+    (u^{\mp}_3-u^{\mp}_{3a})(u^{\mp}_3-u^{\mp}_{3b})(u^{\mp}_3-u^{\mp}_{3c})
+  \big]^{1/2},
+  \eqdefn{eq:w150}&\eqsubdef{eq:w150a}\cr
+  {{\partial v^{\mp}_3}\over{\partial z}}&=-2\kappa_{\pm}\big[
+    (v^{\mp}_3-v^{\mp}_{3a})(v^{\mp}_3-v^{\mp}_{3b})(v^{\mp}_3-v^{\mp}_{3c})
+  \big]^{1/2},
+  \eqsubdef{eq:w150b}\cr
+  }
+$$
+where the real-valued roots for the following discussion without loss of
+generality are assumed to obey $u^{\mp}_{3a} \le u^{\mp}_{3c} \le u^{\mp}_{3c}$
+and $v^{\mp}_{3a} \le v^{\mp}_{3c} \le v^{\mp}_{3c}$.
+
+By reformulating the field variables $u^{\mp}_3$ and $u^{\mp}_3$ in terms of
+temporary expressions of the form
+$(u^{\pm}_3-u^{\pm}_{3a})^{1/2}(u^{\pm}_{3b}-u^{\pm}_{3a})^{-1/2}$ and
+$(v^{\pm}_3-v^{\pm}_{3a})^{1/2}(v^{\pm}_{3b}-v^{\pm}_{3a})^{-1/2}$, respectively,
+Eqs.~\eqref{eq:w150} are expressed in an elliptic integral form which can be
+integrated into explicit solutions for the forward and backward traveling pump
+waves in terms of Jacobian elliptic functions, as
+$$
+  \eqalignno{
+  u^{\mp}_3(z)=u^{\mp}_{3a}+(u^{\mp}_{3b}-u^{\mp}_{3a})
+  \sn^2&[\kappa_{\pm}(u^{\mp}_{3c}-u^{\mp}_{3a})^{1/2}z
+                      +F(\sigma_{\pm},\xi_{\pm}),\xi_{\pm}],
+  \eqdefn{eq:w160}&\eqsubdef{eq:w160a}\cr
+  v^{\mp}_3(z)=v^{\mp}_{3a}+(v^{\mp}_{3b}-v^{\mp}_{3a})
+  \sn^2&[\kappa_{\pm}(v^{\mp}_{3c}-v^{\mp}_{3a})^{1/2}(L-z)
+                      +F(\sigma'_{\pm},\xi'_{\pm}),\xi'_{\pm}],
+  \qquad
+  &\eqsubdef{eq:w160b}\cr
+  }
+$$
+where $F(\sigma,\xi)$ denotes the normal elliptic integral of the first
+kind\numberedfootnote{P.~F. Byrd and M.~D. Friedman, {\it Handbook of
+  Elliptic Integrals for Engineers and Scientists} (Springer, 1971).}
+$$
+  F(\sigma,\xi)=\int^{\sigma}_0{{ds}\over{[(1-s^2)(1-\xi^2 s^2)]^{1/2}}}
+\eqdef{eq:w170}
+$$
+with moduli for the forward and backward traveling wave envelopes
+$$
+  \xi_{\pm}=\bigg(
+    {{u^{\mp}_{3b}-u^{\mp}_{3a}}\over{u^{\mp}_{3c}-u^{\mp}_{3a}}}
+  \bigg)^{1/2},\quad
+  \xi'_{\pm}=\bigg(
+    {{v^{\mp}_{3b}-v^{\mp}_{3a}}\over{v^{\mp}_{3c}-v^{\mp}_{3a}}}
+  \bigg)^{1/2},
+\eqdef{eq:w180}
+$$
+and with respective upper limits of integration
+$$
+  \eqalignno{
+  \sigma_{\pm}&=[(u^{\mp}_3(0)-u^{\mp}_{3a})/(u^{\mp}_{3b}-u^{\mp}_{3a})]^{1/2},
+  \eqdefn{eq:w190}&\eqsubdef{eq:w190a}\cr
+  \sigma'_{\pm}&=[(v^{\mp}_3(L)-v^{\mp}_{3a})/(v^{\mp}_{3b}-v^{\mp}_{3a})]^{1/2}.
+  &\eqsubdef{eq:w190b}\cr
+  }
+$$
+The general solutions in Eqs.~\eqref{eq:w160} for the forward and backward
+traveling pump waves directly provides the explicit solutions for the idler
+and signal waves via the invariants of motion from Eqs.~\eqref{eq:w110}.
+
+\section{Solutions for the envelopes for singly resonant parametric oscillation}
+For the present purpose, we focus on a singly resonant configuration with only
+the signal being reflected. Also, we assume that no idler wave is present at
+$z=0$, hence with $m^{\pm}_1=u^{\pm}_2(0)+u^{\mp}_3(0)$, $m^{\pm}_2=u^{\mp}_3(0)
+$ and
+$m^{\mp}_3=-u^{\pm}_2(0)$, leading to the solution for the forward propagating
+phase difference as
+$$
+  \cos\varphi_{\pm}={{(u^{\mp}_3(0)-u^{\mp}_3)\Delta\aleph_{\pm}}
+                        \over{(u^{\pm}_1 u^{\pm}_2 u^{\mp}_3)^{1/2}}},
+\eqdef{eq:o10}
+$$
+where as previously $\Delta\aleph_{\pm}=(\Delta k\pm\Delta\alpha)/(2\kappa_{\pm})$
+is the phase mismatch normalized to the coupling efficiency.
+The general solution for the fields of the parametric process is expressed in
+Jacobian elliptic functions\numberedfootnote{P.~F. Byrd and M.~D. Friedman,
+  {\it Handbook of Elliptic Integrals for Engineers and Scientists}
+  (Springer, 1971).}
+as
+$$
+  \eqalignno{
+    \hbox{Idler:}\qquad
+      u^{\pm}_1(z)&=u^{\mp}_3(0)-u^{\mp}_3(z),
+    \eqdefn{eq:o20}&\eqsubdef{eq:o20a}\cr
+    \hbox{Signal:}\qquad
+      u^{\pm}_2(z)&=u^{\pm}_2(0)+u^{\mp}_3(0)-u^{\mp}_3(z),
+    &\eqsubdef{eq:o20b}\cr
+    \hbox{Pump:}\qquad
+      u^{\mp}_3(z)&=u^{\mp}_{3a}+(u^{\mp}_{3b}-u^{\mp}_{3a})
+        \sn^2\big(\kappa_{\pm}(u^{\mp}_{3c}-u^{\mp}_{3a})^{1/2}z
+               +K(\xi_{\pm}),\xi_{\pm}\big),
+    &\eqsubdef{eq:o20c}\cr
+  }
+$$
+where the constant coefficients are
+$$
+  \eqalignno{
+  u^{\mp}_{3a}&={{u^{\mp}_{3}(0)}\over{2}}\big\{1+s^2_{\pm}+\phi^2_{\pm}
+      -\big[(1+s^2_{\pm}+\phi^2_{\pm})^2-4\phi^2_{\pm}\big]^{1/2}\big\}
+  \eqdefn{eq:o30}&\eqsubdef{eq:o30a}\cr
+  u^{\mp}_{3b}&=u^{\mp}_{3}(0)
+  &\eqsubdef{eq:o30b}\cr
+  u^{\mp}_{3c}&={{u^{\mp}_{3}(0)}\over{2}}\big\{1+s^2_{\pm}+\phi^2_{\pm}
+      +\big[(1+s^2_{\pm}+\phi^2_{\pm})^2-4\phi^2_{\pm}\big]^{1/2}\big\}
+  &\eqsubdef{eq:o30c}\cr
+  }
+$$
+with
+$$
+  s^2_{\pm}=u^{\pm}_2(0)/u^{\mp}_3(0)
+  \eqdef{eq:o36}
+$$
+as the normalized initial signal vs pump intensity,
+$$
+  \phi^2_{\pm}=\Delta\aleph^2_{\pm}/u^{\mp}_3(0)
+\eqdef{eq:o38}
+$$
+the phase mismatch normalized against the pump intensity, and where
+$$
+  K(\xi)=\int^1_0{{ds}\over{[(1-s^2)(1-\xi^2 s^2)]^{1/2}}}
+\eqdef{eq:o40}
+$$
+is the complete elliptic integral of the first kind in the
+standard form, with modulus
+$$
+  \xi_{\pm}=\bigg({{u^{\mp}_{3b}-u^{\mp}_{3a}}
+                  \over{u^{\mp}_{3c}-u^{\mp}_{3a}}}\bigg)^{1/2}.
+\eqdef{eq:o50}
+$$
+
+\section{Solving for the phases of the envelopes}
+By inserting the expressions for the complex-valued envelopes $a^{f\pm}_k$ from
+Eq.~\eqref{eq:w70a} into Eqs.~\eqref{eq:w50a}--\eqref{eq:w50c}, and taking
+the imaginary part, we obtain the equations of motion for the phases
+$\phi^{\pm}_k$ as (compare with Eqs.~\eqref{eq:w80})\numberedfootnote{Recall
+  that the common phase difference $\varphi_{\pm}$ in the parametric interaction
+  is defined by Eq.~\eqref{eq:w100a} as
+  $$
+    \varphi_{\pm}\equiv\varphi^{\mp}_3-\varphi^{\pm}_2-\varphi^{\pm}_1
+       +(\Delta k\pm\Delta\alpha)z,
+  $$}
+$$
+  \eqalignno{
+    \hbox{Idler:}\qquad
+    {{\partial\varphi^{\pm}_1(z)}\over{\partial z}}
+      &=\kappa_{\pm}
+          \bigg({{u^{\mp}_3(z) u^{\pm}_2(z)}\over{u^{\pm}_1(z)}}\bigg)^{1/2}
+          \cos\varphi_{\pm}(z),
+    \eqdefn{eq:ph10}&\eqsubdef{eq:ph10a}\cr
+    \hbox{Signal:}\qquad
+    {{\partial\varphi^{\pm}_2(z)}\over{\partial z}}
+      &=\kappa_{\pm}
+          \bigg({{u^{\mp}_3(z) u^{\pm}_1(z)}\over{u^{\pm}_2(z)}}\bigg)^{1/2}
+          \cos\varphi_{\pm}(z),
+    &\eqsubdef{eq:ph10b}\cr
+    \hbox{Pump:}\qquad
+    {{\partial\varphi^{\mp}_3(z)}\over{\partial z}}
+      &=-\kappa_{\pm}
+          \bigg({{u^{\pm}_1(z) u^{\pm}_2(z)}\over{u^{\mp}_3(z)}}\bigg)^{1/2}
+          \cos\varphi_{\pm}(z),
+    &\eqsubdef{eq:ph10c}\cr
+  }
+$$
+with the common coupling coefficient $\kappa_{\pm}$ as previously given by
+Eq.~\eqref{eq:w92}. We can here directly substitute for the $\cos\varphi_{\pm}$
+factor by using Eq.~\eqref{eq:o10},
+$$
+  \cos\varphi_{\pm}={{(u^{\mp}_3(0)-u^{\mp}_3)\Delta\aleph_{\pm}}
+                        \over{(u^{\pm}_1 u^{\pm}_2 u^{\mp}_3)^{1/2}}},
+$$
+from which we obtain Eqs.~\eqref{eq:ph10} as
+$$
+  \eqalignno{
+    \hbox{Idler:}\qquad
+    {{\partial\varphi^{\pm}_1(z)}\over{\partial z}}
+      &=\kappa_{\pm}
+          {{\big(u^{\mp}_3(0) - u^{\mp}_3(z)\big)}
+            \over{u^{\pm}_1(z)}}\Delta\aleph_{\pm},
+    \eqdefn{eq:ph20}&\eqsubdef{eq:ph20a}\cr
+    \hbox{Signal:}\qquad
+    {{\partial\varphi^{\pm}_2(z)}\over{\partial z}}
+      &=\kappa_{\pm}
+          {{\big(u^{\mp}_3(0) - u^{\mp}_3(z)\big)}
+            \over{u^{\pm}_2(z)}}\Delta\aleph_{\pm},
+    &\eqsubdef{eq:ph20b}\cr
+    \hbox{Pump:}\qquad
+    {{\partial\varphi^{\mp}_3(z)}\over{\partial z}}
+      &=-\kappa_{\pm}
+          {{\big(u^{\mp}_3(0) - u^{\mp}_3(z)\big)}
+            \over{u^{\mp}_3(z)}}\Delta\aleph_{\pm}.
+    &\eqsubdef{eq:ph20c}\cr
+  }
+$$
+It is convenient to cast this form into a normalized form, in which the
+amplitudes are normalized against the initial value of the pump amplitude.
+Also, we make use of the definition of the normalized phase variable
+$\phi_{\pm}$, from Eq.~\eqref{eq:o38}\numberedfootnote{We define $\phi_{\pm}$ as
+  $$
+    \phi^2_{\pm}=\Delta\aleph^2_{\pm}/u^{\mp}_3(0)\quad
+      \Leftrightarrow\quad\phi_{\pm}=\Delta\aleph_{\pm}/(u^{\mp}_3(0))^{1/2}.
+  $$}
+as
+$$
+  \eqalignno{
+    \hbox{Idler:}\qquad
+    {{\partial\varphi^{\pm}_1(z)}\over{\partial z}}
+      &=\underbrace{
+          \kappa_{\pm}\big(u^{\mp}_3(0)\big)^{1/2}
+          }_{\equiv\zeta_{\pm}/L}
+          {{\big(1 - u^{\mp}_3(z)/u^{\mp}_3(0)\big)}
+            \over{(u^{\pm}_1(z)/u^{\mp}_3(0))}}
+          \underbrace{
+            {{\Delta\aleph_{\pm}}\over{\big(u^{\mp}_3(0)\big)^{1/2}}}
+          }_{\equiv\phi_{\pm}}\cr
+      &=\Big({{\zeta_{\pm}\phi_{\pm}}\over{L}}\Big)
+          {{\big(1 - u^{\mp}_3(z)/u^{\mp}_3(0)\big)}
+            \over{(u^{\pm}_1(z)/u^{\mp}_3(0))}},
+    \eqdefn{eq:ph30}&\eqsubdef{eq:ph30a}\cr
+    \hbox{Signal:}\qquad
+    {{\partial\varphi^{\pm}_2(z)}\over{\partial z}}
+      &=\Big({{\zeta_{\pm}\phi_{\pm}}\over{L}}\Big)
+          {{\big(1 - u^{\mp}_3(z)/u^{\mp}_3(0)\big)}
+            \over{(u^{\pm}_2(z)/u^{\mp}_3(0))}},
+    &\eqsubdef{eq:ph30b}\cr
+    \hbox{Pump:}\qquad
+    {{\partial\varphi^{\mp}_3(z)}\over{\partial z}}
+      &=-\Big({{\zeta_{\pm}\phi_{\pm}}\over{L}}\Big)
+          {{\big(1 - u^{\mp}_3(z)/u^{\mp}_3(0)\big)}
+            \over{(u^{\mp}_3(z)/u^{\mp}_3(0))}}.
+    &\eqsubdef{eq:ph30c}\cr
+  }
+$$
+All occurrences\numberedfootnote{Keeping in mind the convention that $k=1$
+  corresponds to the idler, $k=2$ to the signal, and $k=3$ to the pump.}
+of $u^{\pm}_k$ in the right-hand sides of Eqs.~\eqref{eq:ph30} all are known
+functions, given explicitly by Eqs.~\eqref{eq:o20} with coefficients from
+Eqs.~\eqref{eq:o30}.
+
+\section{Solving the phase of the pump wave}
+If we start with the phase $\varphi^{\mp}_3$ for the pump, inserting the explicit
+solution given by Eq.~\eqref{eq:o20c} into Eq.~\eqref{eq:ph30c}, we after some
+cumbersome but straightforward algebra obtain Eq.~\eqref{eq:ph30c} in the form
+$$
+    {{\partial\varphi^{\mp}_3(z)}\over{\partial z}}
+       =-C_{\pm}\bigg(
+         {{1-A_{\pm}\sn^2\big(D_{\pm}z+K(\xi_{\pm}),\xi_{\pm}\big)}
+           \over{1+B_{\pm}\sn^2\big(D_{\pm}z+K(\xi_{\pm}),\xi_{\pm}\big)}}
+       \bigg),
+  \eqdef{eq:ph40}
+$$
+with solution given by the integral
+$$
+  \varphi^{\mp}_3(z)-\varphi^{\mp}_3(0)
+       =-C_{\pm}\int^z_0
+       \bigg(
+         {{1-A_{\pm}\sn^2\big(D_{\pm}z'+K(\xi_{\pm}),\xi_{\pm}\big)}
+           \over{1+B_{\pm}\sn^2\big(D_{\pm}z'+K(\xi_{\pm}),\xi_{\pm}\big)}}
+       \bigg)\,dz',
+  \eqdef{eq:ph50}
+$$
+where the constant coefficients $A_{\pm}$, $B_{\pm}$, $C_{\pm}$ and $D_{\pm}$ are
+given as
+$$
+  \eqalignno{
+    A_{\pm}&={{(u^{\mp}_{3b}-u^{\mp}_{3a})/u^{\mp}_3(0)}
+              \over{{\big(1-u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}},
+    \eqdefn{eq:ph60}&\eqsubdef{eq:ph60a}\cr
+    B_{\pm}&={{(u^{\mp}_{3b}-u^{\mp}_{3a})/u^{\mp}_3(0)}
+              \over{{\big(u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}},
+    &\eqsubdef{eq:ph60b}\cr
+    C_{\pm}&=\Big({{\zeta_{\pm}\phi_{\pm}}\over{L}}\Big)
+            {{\big(1-u^{\mp}_{3a}/u^{\mp}_3(0)\big)}
+              \over{{\big(u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}},
+    &\eqsubdef{eq:ph60c}\cr
+    D_{\pm}&=\Big({{\zeta_{\pm}}\over{L}}\Big)
+            {{(u^{\mp}_{3c}-u^{\mp}_{3a})^{1/2}}
+              \over{{u^{\mp}_3(0)}}},
+    &\eqsubdef{eq:ph60d}\cr
+  }
+$$
+where $u^{\mp}_{3a}$, $u^{\mp}_{3b}$ and $u^{\mp}_{3c}$ are given explicitly by
+Eqs.~\eqref{eq:o30}.
+
+\section{Solving the phase integral involving Jacobi elliptic functions}
+In other words, we have now arrived at the point where we from
+Eq.~\eqref{eq:ph50} need to evaluate the integral of the form
+$$
+  I=\int^z_0{{1-A\sn^2\big(Dz'+K(\xi),\xi\big)}
+           \over{1+B\sn^2\big(Dz'+K(\xi),\xi\big)}}\,dz'.
+  \eqdef{eq:ph70}
+$$
+We first substitute
+$$
+  u=Dz'+K(\xi)\quad\Leftrightarrow\quad dz'=du/D,
+  \eqdef{eq:ph80}
+$$
+which gives
+$$
+  I={{1}\over{D}}\int^{Dz+K(\xi)}_{K(\xi)}{{1-A\sn^2\big(u,\xi\big)}
+           \over{1+B\sn^2\big(u,\xi\big)}}\,du.
+  \eqdef{eq:ph90}
+$$
+We may now split the integrand by partial fraction decomposition%
+\numberedfootnote{Swedish {\it partialbr{\aa}ksuppdelning}; you may
+  easily verify that this relation holds.}
+$$
+  {{1-A\sn^2\big(u,\xi\big)}\over{1+B\sn^2\big(u,\xi\big)}}
+    =-{{A}\over{B}}+{{(A+B)}\over{B}}{{1}\over{1+B\sn^2\big(u,\xi\big)}},
+  \eqdef{eq:ph100}
+$$
+which enables us to split the integral into two easier terms, of which the
+first one is trivial, as
+$$
+  \eqalign{
+    I&={{1}\over{D}}\int^{Dz+K(\xi)}_{K(\xi)}
+          \bigg(-{{A}\over{B}}
+                +{{(A+B)}\over{B}}{{1}\over{1+B\sn^2\big(u,\xi\big)}}
+          \bigg)\,du\cr
+     &=-{{A}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}\,du
+          +{{(A+B)}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}
+                {{du}\over{1+B\sn^2\big(u,\xi\big)}}\cr
+     &=-{{Az}/{B}}
+          +{{(A+B)}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}
+                {{du}\over{1+B\sn^2\big(u,\xi\big)}}\cr
+  }
+  \eqdef{eq:ph110}
+$$
+As for the second remaining integral, we may here identify the standard
+identity\numberedfootnote{The incomplete elliptic integral of the third
+  kind is defined in terms of the Jacobi elliptic function $\sn(u,\xi)$ as
+  $$
+    \Pi(u,\alpha^2)=\int^{u}_0{{du'}\over{1-\alpha^2\sn^2(u',\xi)}}
+  $$
+  in the Legendre canonical form and in the notation of Byrd and Friedman,
+  only with the difference that we here adopt to the notation $\xi\equiv k$
+  as here used. We here consider the elliptic modulus $\xi$ to be implicitly
+  present in this integral, via the presence of $\sn(u)=sn(u,\xi)$.
+  From its definition, the incomplete elliptic integral of the third kind has
+  the property
+  $$
+    {{d}\over{du}}\Pi(\varphi,\alpha^2,\xi)={{1}\over{1-\alpha^2\sn^2(u,\xi)}}.
+  $$
+  See P.~F. Byrd and M.~D. Friedman,
+  {\it Handbook of Elliptic Integrals for Engineers and Scientists}
+  (Springer, 1971), {\bf 400.01}, p.~223.}
+for the incomplete elliptic integral of the third kind,
+$\Pi(\varphi,\alpha^2,k)$, as
+$$
+  {{d}\over{du}}\Pi(u,\alpha^2)={{1}\over{1-\alpha^2\sn^2(u,\xi)}},
+  \eqdef{eq:ph120}
+$$
+where we may identify $B=-\alpha^2$. Using this, we may hence cast the integral
+of interest into
+$$
+  \eqalign{
+    I&=-{{Az}/{B}}
+          +{{(A+B)}\over{BD}}\Big[\Pi(u,-B)\Big]^{Dz+K(\xi)}_{K(\xi)}\cr
+     &=-{{Az}/{B}}
+          +{{(A+B)}\over{BD}}\big[\Pi(Dz+K(\xi),-B)-\Pi(K(\xi),-B)\big].\cr
+  }
+  \eqdef{eq:ph130}
+$$
+
+\section{Summarizing the solution for the phase of the pump wave}
+To summarize, the phase of interest given by Eq.~\eqref{eq:ph50} hence takes
+the form
+$$
+  \varphi^{\mp}_3(z)-\varphi^{\mp}_3(0)
+    ={{A_{\pm}C_{\pm}}\over{B_{\pm}}}z
+       -{{(A_{\pm}+B_{\pm})C_{\pm}}\over{B_{\pm}D_{\pm}}}
+          \big[\Pi(D_{\pm}z+K(\xi_{\pm}),-B_{\pm})-\Pi(K(\xi_{\pm}),-B_{\pm})\big],
+  \eqdef{eq:ph140}
+$$
+with the coefficients $A_{\pm}$, $B_{\pm}$, $C_{\pm}$ and $D_{\pm}$ as previously
+given by Eqs.~\eqref{eq:ph60}. To recapitulate the first-principles form of
+this solution, this is expressed as
+$$
+  \varphi^{\mp}_3(z)-\varphi^{\mp}_3(0)
+    ={{A_{\pm}C_{\pm}}\over{B_{\pm}}}z
+       -{{(A_{\pm}+B_{\pm})C_{\pm}}\over{B_{\pm}D_{\pm}}}
+          \int^{D_{\pm}z+K(\xi_{\pm})}_{K(\xi_{\pm})}
+            {{du}\over{1+B_{\pm}\sn^2(u,\xi_{\pm})}}.
+  \eqdef{eq:ph140}
+$$
+Depending on the implementation of this integral in some suitable programming
+language, we may benefit from reformulating the integral by substituting for
+the elliptic function as\numberedfootnote{For example, in the implementation
+  of {\tt ellippi(n,phi,m)} in the {\tt mpmath} Python package, the incomplete
+  elliptic integral of the third kind is defined in the form
+  $$
+    \Pi(n;\phi,m)=\int^{\phi}_0{{dt}\over{(1-n\sin^2t)(1-m\sin^2t)^{1/2}}}.
+  $$
+  See {\tt https://mpmath.org/doc/current/functions/elliptic.html\#ellippi}
+  for details.
+}
+$$
+  \eqalign{
+  \sn(u,\xi)=\sin(\varphi)
+  \qquad&\Leftrightarrow\qquad
+  {{d\sn(u,\xi)}\over{du}}du=\cos(\varphi)d\varphi\cr
+  \qquad&\Leftrightarrow\qquad
+  (1-\sn^2(u,\xi))^{1/2}(1-\xi^2\sn^2(u,\xi))^{1/2}du=\cos(\varphi)d\varphi\cr
+  \qquad&\Leftrightarrow\qquad
+  (1-\sin^2\varphi)^{1/2}(1-\xi^2\sin^2\varphi)^{1/2}du=\cos(\varphi)d\varphi\cr
+  \qquad&\Leftrightarrow\qquad
+  du={{\cos(\varphi)}\over{(1-\sin^2\varphi)^{1/2}(1-\xi^2\sin^2\varphi)^{1/2}}}
+     d\varphi\cr
+  \qquad&\Leftrightarrow\qquad
+  du={{d\varphi}\over{(1-\xi^2\sin^2\varphi)^{1/2}}}\cr
+  }
+  \eqdef{eq:ph150}
+$$
+which gives
+$$
+  \varphi^{\mp}_3(z)-\varphi^{\mp}_3(0)
+    ={{A_{\pm}C_{\pm}}\over{B_{\pm}}}z
+       -{{(A_{\pm}+B_{\pm})C_{\pm}}\over{B_{\pm}D_{\pm}}}
+          \int\limits^{\arcsin(\sn(D_{\pm}z+K(\xi_{\pm}),\xi))}_{\arcsin(\sn(K(\xi_{\pm}),\xi))}
+{{d\varphi}\over{(1+B_{\pm}\sin^2\varphi)(1-\xi^2\sin^2\varphi)^{1/2}}}.
+  \eqdef{eq:ph160}
+$$
+
+\section{Solving the phase of the signal wave}
+In similar to the procedure for the phase of the pump wave, we for the phase
+$\varphi^{\mp}_3$ of the signal wave insert the explicit solution given by
+Eq.~\eqref{eq:o20b} into Eq.~\eqref{eq:ph30b}, and after some straightforward
+algebra obtain Eq.~\eqref{eq:ph30b} in the form
+$$
+    {{\partial\varphi^{\pm}_2(z)}\over{\partial z}}
+       =C'_{\pm}\bigg(
+         {{1-A'_{\pm}\sn^2\big(D'_{\pm}z+K(\xi_{\pm}),\xi_{\pm}\big)}
+           \over{1-B'_{\pm}\sn^2\big(D'_{\pm}z+K(\xi_{\pm}),\xi_{\pm}\big)}}
+       \bigg),
+  \eqdef{eq:ph170}
+$$
+with solution given by the integral\numberedfootnote{Notice the change of
+  sign of $B'_{\pm}$ and $C'_{\pm}$ compared to the similar denominator for
+  the phase $\varphi^{\pm}_3$ of the pump wave.}
+$$
+  \varphi^{\pm}_2(z)-\varphi^{\pm}_2(0)
+       =C'_{\pm}\int^z_0
+       \bigg(
+         {{1-A'_{\pm}\sn^2\big(D'_{\pm}z'+K(\xi_{\pm}),\xi_{\pm}\big)}
+           \over{1-B'_{\pm}\sn^2\big(D'_{\pm}z'+K(\xi_{\pm}),\xi_{\pm}\big)}}
+       \bigg)\,dz'=C'_{\pm}I,
+  \eqdef{eq:ph180}
+$$
+where the constant coefficients $A'_{\pm}$, $B'_{\pm}$, $C'_{\pm}$ and $D'_{\pm}$
+are given as
+$$
+  \eqalignno{
+    A'_{\pm}&={{(u^{\mp}_{3b}-u^{\mp}_{3a})/u^{\mp}_3(0)}
+              \over{{\big(1-u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}}=A_{\pm},
+    \eqdefn{eq:ph190}&\eqsubdef{eq:ph190a}\cr
+    B'_{\pm}&={{(u^{\mp}_{3b}-u^{\mp}_{3a})/u^{\mp}_3(0)}
+              \over{{1+s^2_{\pm}-\big(u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}},
+    &\eqsubdef{eq:ph190b}\cr
+    C'_{\pm}&=\Big({{\zeta_{\pm}\phi_{\pm}}\over{L}}\Big)
+            {{\big(1-u^{\mp}_{3a}/u^{\mp}_3(0)\big)}
+              \over{{1+s^2_{\pm}-\big(u^{\mp}_{3a}/u^{\mp}_3(0)\big)}}},
+    &\eqsubdef{eq:ph190c}\cr
+    D'_{\pm}&=\Big({{\zeta_{\pm}}\over{L}}\Big)
+            {{(u^{\mp}_{3c}-u^{\mp}_{3a})^{1/2}}
+              \over{{u^{\mp}_3(0)}}}=D_{\pm},
+    &\eqsubdef{eq:ph190d}\cr
+  }
+$$
+where $u^{\mp}_{3a}$, $u^{\mp}_{3b}$ and $u^{\mp}_{3c}$ as previously are given
+explicitly by Eqs.~\eqref{eq:o30}. Just as for the pump, we may now split
+the integrand by partial fraction decomposition\numberedfootnote{For the
+  signal though with a different sign of $B$, leading to a partial fraction
+  decomposition of the form
+  $$
+    {{1-A\sn^2\big(u,\xi\big)}\over{1-B\sn^2\big(u,\xi\big)}}
+      ={{A}\over{B}}-{{(A-B)}\over{B}}{{1}\over{1-B\sn^2\big(u,\xi\big)}},
+  $$
+  but otherwise split in a completely analogous manner.}
+which again enables us to split the integral into two easier terms, of which
+the first one is trivial and the second interpreted as an incomplete elliptic
+integral of the third kind, as
+$$
+  \eqalign{
+    I&={{1}\over{D}}\int^{Dz+K(\xi)}_{K(\xi)}
+          \bigg({{A}\over{B}}
+                -{{(A-B)}\over{B}}{{1}\over{1-B\sn^2\big(u,\xi\big)}}
+          \bigg)\,du\cr
+     &={{A}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}\,du
+          -{{(A-B)}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}
+                {{du}\over{1-B\sn^2\big(u,\xi\big)}}\cr
+     &={{Az}/{B}}
+          -{{(A-B)}\over{BD}}\int^{Dz+K(\xi)}_{K(\xi)}
+                {{du}\over{1-B\sn^2\big(u,\xi\big)}}\cr
+     &={{Az}/{B}}
+          -{{(A-B)}\over{BD}}\Big[\Pi(u,B)\Big]^{Dz+K(\xi)}_{K(\xi)}\cr
+     &={{Az}/{B}}
+          -{{(A-B)}\over{BD}}\big[\Pi(Dz+K(\xi),B)-\Pi(K(\xi),B)\big].\cr
+  }
+  \eqdef{eq:ph200}
+$$
+
+\section{Summarizing the solution for the phase of the signal wave}
+To summarize, the phase of the signal envelope as given by Eq.~\eqref{eq:ph180}
+hence takes the form
+$$
+  \varphi^{\pm}_2(z)-\varphi^{\pm}_2(0)
+    ={{A'_{\pm}C'_{\pm}}\over{B'_{\pm}}}z
+       -{{(A'_{\pm}-B'_{\pm})C'_{\pm}}\over{B'_{\pm}D'_{\pm}}}
+          \big[\Pi(D'_{\pm}z+K(\xi_{\pm}),B'_{\pm})-\Pi(K(\xi_{\pm}),B'_{\pm})\big],
+  \eqdef{eq:ph210}
+$$
+with the coefficients $A'_{\pm}$, $B'_{\pm}$, $C'_{\pm}$ and $D'_{\pm}$ as previously
+given by Eqs.~\eqref{eq:ph190}. To recapitulate the first-principles form of
+this solution, just as previously for the pump wave, this is expressed as
+$$
+  \varphi^{\pm}_2(z)-\varphi^{\pm}_2(0)
+    ={{A'_{\pm}C'_{\pm}}\over{B'_{\pm}}}z
+       -{{(A'_{\pm}-B'_{\pm})C'_{\pm}}\over{B'_{\pm}D'_{\pm}}}
+          \int^{D'_{\pm}z+K(\xi_{\pm})}_{K(\xi_{\pm})}
+            {{du}\over{1-B_{\pm}\sn^2(u,\xi_{\pm})}}.
+  \eqdef{eq:ph220}
+$$
+
+\centerline{\epsfxsize=150mm\epsfbox{figs/graph-06-pump.eps}}
+\noindent{{\bf Figure~1.} Evolution of pump intensity
+  ($S_0(z)/S_0(0)$), normalized ellipticity ($S_3(z)/S_0(z)$) and
+  polarization state ($S_1(z)/S_0(z)$, $S_2(z)/S_0(z)$, $S_3(z)/S_0(z)$).
+  The parameters used are as follows: Initial signal-to-pump ratio
+  $s^2_+=s^2_-0.1$, normalized electric dipolar phase mismatch
+  $\Delta k L=2.0$, a relative gyrotropic correction
+  $\Delta\alpha/\Delta k=2.0$, and the LCP/RCP gain coefficients
+  $\zeta_+=\kappa_+L(u^-_3(0))^{1/2}=4.0$ and
+  $\zeta_-=\kappa_-L(u^+_3(0))^{1/2}=4.0$.}
+\vfill\eject
+
+\centerline{\epsfxsize=150mm\epsfbox{figs/graph-06-signal.eps}}
+\noindent{{\bf Figure~2.} Evolution of signal intensity
+  ($S_0(z)/S_0(0)$), normalized ellipticity ($S_3(z)/S_0(z)$) and
+  polarization state ($S_1(z)/S_0(z)$, $S_2(z)/S_0(z)$, $S_3(z)/S_0(z)$),
+  using the same parameters as in Fig.~1.}
+\vfill\eject
+
+\centerline{\epsfxsize=86mm\epsfbox{figs/graph-06-stokes-pump.eps}}
+\noindent{{\bf Figure~3.} The polarization state of the pump wave mapped
+  onto the Poincar\'e sphere, using the same parameters as in previous
+  figures.}
+
+\centerline{\epsfxsize=86mm\epsfbox{figs/graph-06-stokes-signal.eps}}
+\noindent{{\bf Figure~4.} The polarization state of the signal wave mapped
+  onto the Poincar\'e sphere, using the same parameters as in previous
+  figures.}
+\vfill\eject
+
+\bye
