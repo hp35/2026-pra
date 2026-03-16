@@ -19,7 +19,7 @@ PDF2SVG   = pdf2svg
 # The POINCARE program for mapping paths of Stokes parameters onto the
 # Poincare sphere.
 #
-POINCAREPATH = ../../2025-pulsedopa/poincare
+POINCAREPATH = ../../../2025-pulsedopa/poincare
 POINCARE = poincare
 
 all:
@@ -73,4 +73,4 @@ poincaremap-signal:
 #		--auxsource stokepathlabels.mp
 
 clean:
-	-rm -Rf *~ *.dat *.dvi *.log
+	-rm -Rf *~ *.dat *.dvi *.log *.eps *.png *.svg *.1 *.pdf *.mpx

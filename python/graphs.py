@@ -179,12 +179,11 @@ def savegraph(fig, basename="out"):
     return
 
 """
-graph_01_classic
-         - Generate graph of signal-to-pump ratio $s_{\pm}$
+graph_00 - Generate graph of signal-to-pump ratio $s_{\pm}$
            vs normalized phase mismatch $\phi_{\pm}$ for a
            set of reflectances $R_{\pm}$.
 """
-def graph_01_classic(rrvals, plotsurface=False):
+def graph_00(rrvals, plotsurface=False, basename="whatever"):
     zeta = 1.0
     phimax = 3.0
     smax = np.sqrt(6.0)
@@ -228,7 +227,7 @@ def graph_01_classic(rrvals, plotsurface=False):
     ax.set_ylim([0, max(s2)])
     ax.set_xlabel("$\\phi_{\\pm}$")
     ax.set_ylabel("$s^2_{\\pm}$")
-    savegraph(fig, basename="graph-01")
+    savegraph(fig, basename=basename)
 
     if plotsurface:
         fig, ax = plt.subplots(figsize=(5.4,5.4),
@@ -241,7 +240,7 @@ def graph_01_classic(rrvals, plotsurface=False):
         ax.set_zlabel("$z$")
         ax.set_xlabel("$\\phi_{\\pm}$")
         ax.set_ylabel("$s^2_{\\pm}$")
-        savegraph(fig, basename="graph-01-surf")
+        savegraph(fig, basename=basename+"-surf")
     
     return
 
@@ -255,7 +254,8 @@ graph_01 - Generate graph of signal-to-pump ratio $s_{\pm}$
            vs normalized phase mismatch $\phi_{\pm}$ for a
            set of reflectances $R_{\pm}$.
 """
-def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False):
+def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False, 
+             basename="whatever"):
     zeta = 1.0
     phimax = 3.0
     smax = np.sqrt(6.0)
@@ -338,15 +338,14 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False):
                          method='cubic')
             yminus = griddata(pointsminus, valuesminus, x.reshape(-1,1),
                          method='cubic')
-        # nnroll = int(1.0*nn/phimax)
-        # yplus = np.roll(yplus,nnroll)
-        # yplus[0:nnroll-1] = np.nan
-        # yminus = np.roll(y,-nnroll)
-        # yminus[nn-nnroll-1:nn-1] = np.nan
         s0signal = sum_nan_arrays(yplus, yminus)
         s3signal = sum_nan_arrays(yplus, -yminus)
-        axg[0].plot(x,s0signal,'r-');
-        axg[1].plot(x,s3signal,'b-');
+        axg[0].plot(x,s0signal, color=color,
+                linestyle=linestyle,
+                solid_capstyle='round', dash_capstyle='round');
+        axg[1].plot(x,s3signal, color=color,
+                linestyle=linestyle,
+                solid_capstyle='round', dash_capstyle='round');
         axgg.plot(x,yplus,'r-',x,yminus,'b-');
 
     addlegend(ax, ccolors, clinestyles, clabels)
@@ -357,7 +356,17 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False):
     ax.set_ylim([0, max(s2)])
     ax.set_xlabel("$\\phi_{\\pm}$")
     ax.set_ylabel("$s^2_{\\pm}$")
-    savegraph(fig, basename="graph-01")
+
+    addlegend(axg[0], ccolors, clinestyles, clabels)
+    axg[0].grid(visible=True, which='major', axis='both', color=gridcolor)
+    axg[1].tick_params(which="both", top=True, right=True, labeltop=False,
+                   bottom=True, labelbottom=True, direction="in")
+    axg[0].set_xlim([min(dphi), max(dphi)])
+    axg[0].set_ylim([0, max(s2)])
+    axg[0].set_xlabel("$\\phi_{\\pm}$")
+    axg[0].set_ylabel("$s^2_{+}+s^2_{-}$")
+
+    savegraph(figg, basename=basename)
 
     if plotsurface:
         fig, ax = plt.subplots(figsize=(5.4,5.4),
@@ -374,7 +383,7 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False):
         ax.set_zlabel("$z$")
         ax.set_xlabel("$\\phi_{\\pm}$")
         ax.set_ylabel("$s^2_{\\pm}$")
-        savegraph(fig, basename="graph-01-surf")
+        savegraph(fig, basename=basename+"-surf")
     
     return
 
@@ -383,7 +392,7 @@ graph_02 - Generate graph of pump threshold $\zeta_{{\rm th}\pm}$
            vs normalized phase mismatch $\phi_{\pm}$ for a set of
            reflectances $R_{\pm}$.
 """
-def graph_02(rrvals):
+def graph_02(rrvals, basename="whatever"):
 
     def carccosh(z):
         """
@@ -426,7 +435,7 @@ def graph_02(rrvals):
     ax.set_ylim([0.2, 0.7])
     ax.set_xlabel("$\\phi_{\\pm}$")
     ax.set_ylabel("$\\zeta^{({\\rm th})}_{\\pm}$")
-    savegraph(fig, basename="graph-02")
+    savegraph(fig, basename=basename)
     return
 
 """"
@@ -435,7 +444,8 @@ graph_03 - Generate graph of signal-to-pump ratio $s_{\pm}$ vs normalized
            $R_{\pm}$. The set of graphs in this figure are generated
            under the assumption of perfect phase matching ($\phi_{\pm}=0$).
 """
-def graph_03(rrvals, plotsurface=False, normalizezeta=False, logzeta=True):
+def graph_03(rrvals, plotsurface=False, normalizezeta=False, logzeta=True,
+             basename="whatever"):
     if normalizezeta:
         zetanormmax = 25.0
     else:
@@ -512,7 +522,7 @@ def graph_03(rrvals, plotsurface=False, normalizezeta=False, logzeta=True):
     ax.set_ylim([0, max(s2)])
     ax.set_xlabel("$(\\zeta_{\\pm}/\\zeta^{({\\rm th})}_{\\pm})^2$")
     ax.set_ylabel("$s^2_{\\pm}$")
-    savegraph(fig, basename="graph-03")
+    savegraph(fig, basename=basename)
 
     if plotsurface:
         fig, ax = plt.subplots(figsize=(5.4,5.4),
@@ -525,7 +535,7 @@ def graph_03(rrvals, plotsurface=False, normalizezeta=False, logzeta=True):
         ax.set_zlabel("$z$")
         ax.set_xlabel("$(\\zeta_{\\pm}/\\zeta^{({\\rm th})}_{\\pm})^2$")
         ax.set_ylabel("$s^2_{\\pm}$")
-        savegraph(fig, basename="graph-03-surf")
+        savegraph(fig, basename=basename+"-surf")
     
     return
 
@@ -537,7 +547,7 @@ graph_04 - Generate graph of constant levels of intensity as function of
            a fixed normalized spatial coordinate $\zeta_{\pm}$ and for a
            set of reflectances $R_{\pm}$.
 """
-def graph_04(rrvals, plotsurface=False):
+def graph_04(rrvals, plotsurface=False, basename="whatever"):
     zetanorm = 1.2
     phimax = 2.0
     n = 100
@@ -574,7 +584,7 @@ def graph_04(rrvals, plotsurface=False):
     #    ax.set_ylim([0, max(s2)])
         ax.set_xlabel("$\\phi_{+}+\\phi_{-}$")
         ax.set_ylabel("$\\phi_{+}-\\phi_{-}$")
-        savegraph(fig, basename="graph-04")
+        savegraph(fig, basename=basename)
 
         if plotsurface:
             fig, ax = plt.subplots(figsize=(5.4,5.4),
@@ -583,17 +593,17 @@ def graph_04(rrvals, plotsurface=False):
             ax.set_zlabel("$s$")
             ax.set_xlabel("$\\phi_{+}+\\phi_{-}$")
             ax.set_ylabel("$\\phi_{+}-\\phi_{-}$")
-            savegraph(fig, basename="graph-04-surf")
+            savegraph(fig, basename=basename+"-surf")
     
     return
 
 def main() -> None:
     rrvals = np.array([0.80, 0.85, 0.9, 0.95])
-#    graph_01_classic(rrvals, plotsurface=False)
-    graph_01(rrvals, plotsurface=False)
-#    graph_02(rrvals)
-#    graph_03(rrvals, plotsurface=False)
-#    graph_04(np.array([0.80]), plotsurface=False)
+#    graph_00(rrvals, plotsurface=False, basename="graph-00")
+    graph_01(rrvals, plotsurface=False, basename="graph-01")
+#    graph_02(rrvals, basename="graph-02")
+#    graph_03(rrvals, plotsurface=False, basename="graph-03")
+#    graph_04(np.array([0.80]), plotsurface=False, basename="graph-04")
     for rr in rrvals:
         phi = 0.0
         zetamax, smax = szetamax(phi, rr)
