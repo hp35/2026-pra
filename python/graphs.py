@@ -17,6 +17,9 @@ from matplotlib.ticker import AutoLocator, AutoMinorLocator
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.patches as patches
 from scipy.interpolate import griddata
+from matplotlib.ticker import FuncFormatter
+from matplotlib.ticker import MaxNLocator
+from matplotlib.ticker import ScalarFormatter
 
 """
 As a global standard, use TeX-style labeling for everything graphics-related.
@@ -33,16 +36,18 @@ linestyles=['dashdot','dotted','dashed','solid']
 gridcolor=[0.85,0.85,0.85]
 boxcolor=[0.50,0.50,0.50]
 
-def addlegend(ax, ccolors, clinestyles, clabels):
-    linespacing = 0.055     # Spacing between legends in the legend box
-    linelength = 0.08       # Length of displayed lines in the legend box
-    xa, ya = 0.70, 0.78     # Lower-left corner of the legend box
-    boxwidth = 0.29         # Width of the rectangular legend box
-    boxheight = 0.22        # Height of the rectangular legend box
-    linetextspacing = 0.02  # Horizontal spacing between line and text
-    alpha = 0.90            # Transparency of the legend text box
-    zorder = 5              # Z-order of legend text box
-    fontsize = 10           # Font size of the text in the legend box
+def addlegend(ax, ccolors, clinestyles, clabels,
+    linespacing = 0.055,     # Spacing between legends in the legend box
+    linelength = 0.08,       # Length of displayed lines in the legend box
+    xa = 0.70,               # Lower-left corner of the legend box
+    ya = 0.78,               # Lower-left corner of the legend box
+    boxwidth = 0.29,         # Width of the rectangular legend box
+    boxheight = 0.22,        # Height of the rectangular legend box
+    linetextspacing = 0.02,  # Horizontal spacing between line and text
+    alpha = 0.90,            # Transparency of the legend text box
+    zorder = 5,              # Z-order of legend text box
+    fontsize = 10,           # Font size of the text in the legend box
+    textyoffset = 0.0):      # Text y-offset relative enclosing box
     xb = xa + linelength
     rect=patches.Rectangle((xa-0.02,ya-0.02), boxwidth, boxheight, angle=0.0, 
                rotation_point='xy', facecolor='white', edgecolor=boxcolor, 
@@ -51,7 +56,7 @@ def addlegend(ax, ccolors, clinestyles, clabels):
                transform=ax.transAxes, zorder=zorder)
     ax.add_patch(rect)
     for k in range(len(ccolors)):
-        y = ya + k*linespacing
+        y = ya + k*linespacing + textyoffset
         ax.plot([xa,xb],[y,y],color=ccolors[k],linestyle=clinestyles[k],
                 transform=ax.transAxes, zorder=zorder, 
                 solid_capstyle='round', dash_capstyle='round')
@@ -348,7 +353,14 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False,
                 solid_capstyle='round', dash_capstyle='round');
         axgg.plot(x,yplus,'r-',x,yminus,'b-');
 
-    addlegend(ax, ccolors, clinestyles, clabels)
+    addlegend(ax, ccolors, clinestyles, clabels,
+        linespacing = 0.055,     # Spacing between legends in the legend box
+        linelength = 0.08,       # Length of displayed lines in the legend box
+        xa = 0.70,               # Lower-left corner of the legend box
+        ya = 0.78,               # Lower-left corner of the legend box
+        boxwidth = 0.29,         # Width of the rectangular legend box
+        boxheight = 0.22,        # Height of the rectangular legend box
+        linetextspacing = 0.02)  # Horizontal spacing between line and text
     ax.grid(visible=True, which='major', axis='both', color=gridcolor)
     ax.tick_params(which="both", top=True, right=True, labeltop=False,
                    bottom=True, labelbottom=True, direction="in")
@@ -357,7 +369,26 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False,
     ax.set_xlabel("$\\phi_{\\pm}$")
     ax.set_ylabel("$s^2_{\\pm}$")
 
-    addlegend(axg[0], ccolors, clinestyles, clabels)
+    major_x_ticks = np.linspace(np.min(dphi), np.min(dphi), 6)
+    addlegend(axg[0], ccolors, clinestyles, clabels,
+        linespacing = 0.110,     # Spacing between legends in the legend box
+        linelength = 0.08,       # Length of displayed lines in the legend box
+        xa = 0.70,               # Lower-left corner of the legend box
+        ya = 0.08,               # Lower-left corner of the legend box
+        boxwidth = 0.29,         # Width of the rectangular legend box
+        boxheight = 0.48,        # Height of the rectangular legend box
+        linetextspacing = 0.02,  # Horizontal spacing between line and text
+        textyoffset = 0.04)       # Text offset relative enclosing box
+    axg[0].set_ylim(bottom=0.0, top=np.max(1.05*np.max(s0signal)))
+    axg[0].yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    axg[0].yaxis.set_major_locator(MaxNLocator(nbins=5, min_n_ticks=5))
+    axg[0].autoscale(enable=True, axis='x', tight=True)
+    axg[0].set_xticks(major_x_ticks)
+    axg[0].set_xticklabels([])
+    axg[0].set_ylabel('$S_0(z)/S_0(0)$')
+    axg[0].grid(which='both')
+
+
     axg[0].grid(visible=True, which='major', axis='both', color=gridcolor)
     axg[1].tick_params(which="both", top=True, right=True, labeltop=False,
                    bottom=True, labelbottom=True, direction="in")
