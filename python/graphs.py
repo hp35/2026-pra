@@ -262,7 +262,7 @@ graph_01 - Generate graph of signal-to-pump ratio $s_{\pm}$
 def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False, 
              basename="whatever"):
     zeta = 1.0
-    phimax = 3.0
+    phimax = 2.5 # 3.0
     smax = np.sqrt(6.0)
     phimean = 2.0
     dphi = np.linspace(-phimax, phimax, 1024)
@@ -291,9 +291,9 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False,
     snplus, cnplus, dnplus, phplus = ellipj(fgplus*zeta+kkplus, mplus)
     snminus, cnminus, dnminus, phminus = ellipj(fgminus*zeta+kkminus, mminus)
 
-    fig, ax = plt.subplots(figsize=(5.2,4.0))
-    figg, axg = plt.subplots(nrows=2, ncols=1, figsize=(5.2,4.0))
-    figgg, axgg = plt.subplots(figsize=(5.2,4.0))
+    fig, ax = plt.subplots(figsize=(5.4,3.0))
+    figg, axg = plt.subplots(nrows=2, ncols=1, figsize=(5.2,5.0))
+    figgg, axgg = plt.subplots(figsize=(5.4,3.0))
     ccolors, clinestyles, clabels = [], [], []
     for k, rr in enumerate(rrvals):
         color,linestyle,labeltext = 'k',linestyles[k],'$R_{\\pm}=%1.2f$'%(rr)
@@ -348,7 +348,7 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False,
         axg[0].plot(x,s0signal, color=color,
                 linestyle=linestyle,
                 solid_capstyle='round', dash_capstyle='round');
-        axg[1].plot(x,s3signal, color=color,
+        axg[1].plot(x,s3signal/s0signal, color=color,
                 linestyle=linestyle,
                 solid_capstyle='round', dash_capstyle='round');
         axgg.plot(x,yplus,'r-',x,yminus,'b-');
@@ -369,33 +369,67 @@ def graph_01(rrvals, plotsurface=False, useLinearInterpolation=False,
     ax.set_xlabel("$\\phi_{\\pm}$")
     ax.set_ylabel("$s^2_{\\pm}$")
 
-    major_x_ticks = np.linspace(np.min(dphi), np.min(dphi), 6)
-    addlegend(axg[0], ccolors, clinestyles, clabels,
-        linespacing = 0.110,     # Spacing between legends in the legend box
+#    major_x_ticks = np.linspace(np.min(dphi), np.max(dphi), 11)
+    addlegend(axg[1], ccolors, clinestyles, clabels,
+        linespacing = 0.090,     # Spacing between legends in the legend box
         linelength = 0.08,       # Length of displayed lines in the legend box
         xa = 0.70,               # Lower-left corner of the legend box
-        ya = 0.08,               # Lower-left corner of the legend box
+        ya = 0.60,               # Lower-left corner of the legend box
         boxwidth = 0.29,         # Width of the rectangular legend box
-        boxheight = 0.48,        # Height of the rectangular legend box
+        boxheight = 0.38,        # Height of the rectangular legend box
         linetextspacing = 0.02,  # Horizontal spacing between line and text
-        textyoffset = 0.04)       # Text offset relative enclosing box
+        textyoffset = 0.025)       # Text offset relative enclosing box
+    axg[0].autoscale(enable=True, axis='x', tight=True)
+#    axg[0].set_xticks(major_x_ticks)
+    axg[0].set_xticklabels([])
+    axg[0].tick_params(axis="x", which="both", top=True, labeltop=False,
+                       bottom=True, labelbottom=True, direction="in")
+    axg[0].tick_params(axis="y", which="both", left=True, labelleft=True,
+                       right=True, labelright=False, direction="in")
+    axg[0].tick_params(axis="both", which="major", length=4, width=1)
+    axg[0].xaxis.set_minor_locator(AutoMinorLocator(5))
+    axg[0].yaxis.set_minor_locator(AutoMinorLocator(5))
+    axg[0].grid(color='.96', linewidth=1, visible=True,
+               which='both', axis='both')
+    axg[0].set_xlim([min(dphi), max(dphi)])
     axg[0].set_ylim(bottom=0.0, top=np.max(1.05*np.max(s0signal)))
     axg[0].yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
     axg[0].yaxis.set_major_locator(MaxNLocator(nbins=5, min_n_ticks=5))
-    axg[0].autoscale(enable=True, axis='x', tight=True)
-    axg[0].set_xticks(major_x_ticks)
-    axg[0].set_xticklabels([])
-    axg[0].set_ylabel('$S_0(z)/S_0(0)$')
-    axg[0].grid(which='both')
-
-
-    axg[0].grid(visible=True, which='major', axis='both', color=gridcolor)
-    axg[1].tick_params(which="both", top=True, right=True, labeltop=False,
-                   bottom=True, labelbottom=True, direction="in")
-    axg[0].set_xlim([min(dphi), max(dphi)])
-    axg[0].set_ylim([0, max(s2)])
-    axg[0].set_xlabel("$\\phi_{\\pm}$")
+#    axg[0].grid(visible=True, which='major', axis='both', color=gridcolor)
+    axg[0].grid(color='.96', linewidth=1, visible=True,
+               which='both', axis='both')
     axg[0].set_ylabel("$s^2_{+}+s^2_{-}$")
+
+    axg[1].set_xlim([min(dphi), max(dphi)])
+    axg[1].set_ylim(bottom=-1.05, top=1.05)
+
+    axg[1].tick_params(axis="x", which="both", top=True, labeltop=False,
+                       bottom=True, labelbottom=True, direction="in")
+    axg[1].tick_params(axis="y", which="both", left=True, labelleft=True,
+                       right=True, labelright=False, direction="in")
+    axg[1].tick_params(axis="both", which="major", length=4, width=1)
+    axg[1].xaxis.set_minor_locator(AutoMinorLocator(5))
+    axg[1].yaxis.set_minor_locator(AutoMinorLocator(5))
+    axg[1].grid(color='.96', linewidth=1, visible=True,
+               which='both', axis='both')
+    axg[1].yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y:.1f}"))
+    axg[1].yaxis.set_major_locator(MaxNLocator(nbins=5, min_n_ticks=5))
+    axg[1].autoscale(enable=True, axis='x', tight=True)
+    axg[1].grid(visible=True, which='major', axis='both', color=gridcolor)
+    axg[1].set_xlabel("$\\Delta\\phi$")
+#    axg[1].set_xlabel("$\\Delta\\phi=\\phi_{+}-\\phi_{-}$")
+    axg[1].set_ylabel("$(s^2_{+}-s^2_{-})/(s^2_{+}+s^2_{-})$")
+    axg[1].text(np.min(dphi)+0.35, 0.27, "LCP", 
+               horizontalalignment="center", verticalalignment="bottom")
+    axg[1].text(np.min(dphi)+0.30, 0.05, "$\\uparrow$", 
+               horizontalalignment="center", verticalalignment="bottom")
+    axg[1].text(np.min(dphi)+0.30, -0.05, "$\\downarrow$", 
+               horizontalalignment="center", verticalalignment="top")
+    axg[1].text(np.min(dphi)+0.35, -0.27, "RCP", 
+               horizontalalignment="center", verticalalignment="top")
+    figg.subplots_adjust(hspace=0.05)
+
+    plt.show()
 
     savegraph(figg, basename=basename)
 
